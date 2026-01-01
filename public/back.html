@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Generate Crypto E-Code</title>
+<style>
+body{font-family:Arial;background:#0b1220;color:#fff;padding:20px}
+input,select,button{width:100%;padding:12px;margin-top:10px}
+button{background:#00ffcc;border:none;font-weight:bold}
+</style>
+</head>
+<body>
+
+<h2>🔐 Generate Crypto Gift E-Code</h2>
+
+<select id="crypto">
+  <option value="ETH">Ethereum (ETH)</option>
+  <option value="USDT">USDT</option>
+</select>
+
+<input id="usd" type="number" placeholder="Amount in USD">
+
+<p id="converted"></p>
+
+<button onclick="generate()">Generate Code</button>
+
+<p id="result"></p>
+
+<script>
+const rates = { ETH: 2960, USDT: 1 };
+
+document.getElementById("usd").oninput = () => {
+  const c = crypto.value;
+  const usd = usdInput.value;
+};
+
+function generate(){
+  const crypto = document.getElementById("crypto").value;
+  const usd = document.getElementById("usd").value;
+  const amount = (usd / rates[crypto]).toFixed(6);
+
+  document.getElementById("converted").innerText =
+    `≈ ${amount} ${crypto}`;
+
+  fetch("/generate",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ crypto, usd, amount })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("result").innerHTML =
+      `✅ Generated Code:<br><b>${d.code}</b>`;
+  });
+}
+</script>
+
+</body>
+</html>

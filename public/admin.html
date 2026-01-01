@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { background:#0f172a;color:#fff;font-family:Arial;padding:20px }
+input,button { padding:8px;margin:4px;width:100%;border-radius:6px;border:none }
+button { background:#22c55e;font-weight:bold;cursor:pointer }
+.card { background:#1e293b;padding:15px;margin-bottom:15px;border-radius:8px }
+.red { background:#ef4444 }
+.yellow { background:#facc15;color:#000 }
+.green { background:#22c55e }
+.badge { padding:3px 6px;border-radius:5px }
+</style>
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<div class="card">
+<h3>Create Code</h3>
+<input id="crypto" placeholder="Crypto (BTC / ETH / USDT)">
+<input id="usd" placeholder="USD">
+<input id="amount" placeholder="Amount">
+<input id="expires" type="datetime-local">
+<button onclick="generate()">Generate</button>
+<p id="genResult"></p>
+</div>
+
+<div class="card">
+<h3>All Codes</h3>
+<button onclick="load()">Refresh</button>
+<div id="list"></div>
+</div>
+
+<script>
+async function generate() {
+  const body = {
+    crypto: crypto.value,
+    usd: usd.value,
+    amount: amount.value,
+    expiresAt: expires.value || null
+  };
+
+  const res = await fetch("/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const j = await res.json();
+  genResult.innerText = j.success ? "Created: " + j.code : j.error;
+  load();
+}
+
+async function load() {
+  const res = await fetch("/codes");
+  const data = await res.json();
+  list.innerHTML = "";
+
+  data.reverse().forEach(c => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    const status = c.revoked
+      ? "<span class='badge red'>REVOKED</span>"
+      : c.redeemed
+      ? "<span class='badge yellow'>REDEEMED</span>"
+      : "<span class='badge green'>ACTIVE</span>";
+
+    div.innerHTML = `
+      <b>${c.code}</b><br>
+      Crypto: <input value="${c.crypto}" onchange="update('${c.code}', 'crypto', this.value)">
+      Amount: <input value="${c.amount}" onchange="update('${c.code}', 'amount', this.value)">
+      USD: <input value="${c.usd}" onchange="update('${c.code}', 'usd', this.value)">
+      Expiry: <input type="datetime-local" value="${c.expiresAt?.slice(0,16) || ''}" onchange="update('${c.code}','expiresAt',this.value)">
+      <br>Status: ${status}<br>
+      <button class="red" onclick="revoke('${c.code}')">Revoke</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+async function update(code, field, value) {
+  await fetch("/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code, [field]: value })
+  });
+}
+
+async function revoke(code) {
+  await fetch("/revoke", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code })
+  });
+  load();
+}
+
+load();
+</script>
+</body>
+</html>
